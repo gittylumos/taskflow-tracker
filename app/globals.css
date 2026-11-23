@@ -1,26 +1,224 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+@custom-variant dark (&:is(.dark *));
+
+/* ==========================================================================
+   Layer 1 — Primitives: raw palette. Never referenced by components.
+   ========================================================================== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gray-0: #ffffff;
+  --gray-25: #f7f8fa;
+  --gray-50: #f1f3f6;
+  --gray-100: #e6e9ee;
+  --gray-200: #d3d8e0;
+  --gray-500: #5b6472;
+  --gray-700: #2c3340;
+  --gray-900: #14171c;
+
+  /* Dark neutrals: no pure black. Canvas #0F1115 -> highest surface #252a32 */
+  --ink-950: #0f1115;
+  --ink-900: #14171c;
+  --ink-850: #181b20;
+  --ink-800: #1e2229;
+  --ink-750: #252a32;
+  --ink-600: #3a414d;
+  --ink-300: #9aa3b2;
+  --ink-100: #e6e9ee;
+
+  --indigo-600: #4f46e5;
+  --indigo-400: #8b93ff;
+  --red-700: #b42318;
+  --red-400: #f97066;
+  --amber-700: #9a5b00;
+  --amber-400: #f5b94a;
+  --green-700: #1b7a44;
+  --green-400: #4cc38a;
+  --blue-700: #1d62c9;
+  --blue-400: #6aa9ff;
+}
+
+/* ==========================================================================
+   Layer 2 — Semantic tokens + theme mapping. Components use only these.
+   Elevation: light = shadow + white on tinted canvas;
+              dark  = lighter surface per level + hairline border, soft shadow.
+   ========================================================================== */
+:root {
+  color-scheme: light;
+  --radius: 0.625rem;
+
+  /* surfaces (elevation 0 -> 3) */
+  --surface-canvas: var(--gray-25);
+  --surface-column: var(--gray-50);
+  --surface-raised: var(--gray-0);
+  --surface-overlay: var(--gray-0);
+
+  --text-primary: var(--gray-900);
+  --text-secondary: var(--gray-500);
+  --border-subtle: var(--gray-100);
+  --border-strong: var(--gray-200);
+  --brand: var(--indigo-600);
+  --on-brand: #ffffff;
+  --focus-ring: var(--indigo-600);
+
+  /* status / priority */
+  --danger: var(--red-700);
+  --warning: var(--amber-700);
+  --success: var(--green-700);
+  --info: var(--blue-700);
+
+  /* elevation shadows */
+  --shadow-1: 0 1px 2px rgb(20 23 28 / 0.06), 0 1px 1px rgb(20 23 28 / 0.04);
+  --shadow-2: 0 4px 10px -2px rgb(20 23 28 / 0.1), 0 2px 4px -2px rgb(20 23 28 / 0.06);
+  --shadow-3: 0 16px 32px -8px rgb(20 23 28 / 0.18), 0 4px 8px -4px rgb(20 23 28 / 0.08);
+  --edge-highlight: transparent;
+
+  /* shadcn contract */
+  --background: var(--surface-canvas);
+  --foreground: var(--text-primary);
+  --card: var(--surface-raised);
+  --card-foreground: var(--text-primary);
+  --popover: var(--surface-overlay);
+  --popover-foreground: var(--text-primary);
+  --primary: var(--brand);
+  --primary-foreground: var(--on-brand);
+  --secondary: var(--gray-50);
+  --secondary-foreground: var(--text-primary);
+  --muted: var(--gray-50);
+  --muted-foreground: var(--text-secondary);
+  --accent: var(--gray-50);
+  --accent-foreground: var(--text-primary);
+  --destructive: var(--danger);
+  --border: var(--border-subtle);
+  --input: var(--border-strong);
+  --ring: var(--focus-ring);
+  --chart-1: var(--indigo-600);
+  --chart-2: var(--blue-700);
+  --chart-3: var(--green-700);
+  --chart-4: var(--amber-700);
+  --chart-5: var(--red-700);
+  --sidebar: var(--gray-0);
+  --sidebar-foreground: var(--text-primary);
+  --sidebar-primary: var(--brand);
+  --sidebar-primary-foreground: var(--on-brand);
+  --sidebar-accent: var(--gray-50);
+  --sidebar-accent-foreground: var(--text-primary);
+  --sidebar-border: var(--border-subtle);
+  --sidebar-ring: var(--focus-ring);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --surface-canvas: var(--ink-950); /* #0F1115 */
+  --surface-column: var(--ink-900); /* #14171C */
+  --surface-raised: var(--ink-850); /* #181B20 — cards */
+  --surface-overlay: var(--ink-800); /* #1E2229 — popovers, dialogs */
+
+  --text-primary: var(--ink-100);
+  --text-secondary: var(--ink-300);
+  --border-subtle: rgb(255 255 255 / 0.07);
+  --border-strong: rgb(255 255 255 / 0.14);
+  --brand: var(--indigo-400);
+  --on-brand: var(--ink-950);
+  --focus-ring: var(--indigo-400);
+
+  --danger: var(--red-400);
+  --warning: var(--amber-400);
+  --success: var(--green-400);
+  --info: var(--blue-400);
+
+  /* shadows are weak on dark; rely on surface lightness + top edge highlight */
+  --shadow-1: 0 1px 2px rgb(0 0 0 / 0.35);
+  --shadow-2: 0 6px 14px -4px rgb(0 0 0 / 0.5);
+  --shadow-3: 0 20px 40px -10px rgb(0 0 0 / 0.6);
+  --edge-highlight: rgb(255 255 255 / 0.05);
+
+  --secondary: var(--ink-800);
+  --muted: var(--ink-800);
+  --accent: var(--ink-750);
+  --sidebar: var(--ink-900);
+  --sidebar-accent: var(--ink-800);
+  --chart-1: var(--indigo-400);
+  --chart-2: var(--blue-400);
+  --chart-3: var(--green-400);
+  --chart-4: var(--amber-400);
+  --chart-5: var(--red-400);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* semantic extras -> bg-surface-column, text-danger, shadow-elev-2 ... */
+  --color-surface-canvas: var(--surface-canvas);
+  --color-surface-column: var(--surface-column);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-danger: var(--danger);
+  --color-warning: var(--warning);
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --shadow-elev-1: var(--shadow-1);
+  --shadow-elev-2: var(--shadow-2);
+  --shadow-elev-3: var(--shadow-3);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Elevated surface helper: inset top highlight reads as depth in dark mode. */
+@utility elevated {
+  box-shadow: var(--shadow-1), inset 0 1px 0 var(--edge-highlight);
 }
