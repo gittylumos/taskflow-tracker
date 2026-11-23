@@ -12,6 +12,7 @@ export const COLUMNS: { id: StatusId; name: string }[] = [
 export interface Member {
   id: string;
   name: string;
+  avatar?: string; // see lib/avatars.ts
 }
 
 export interface Task {

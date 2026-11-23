@@ -4,15 +4,15 @@ import { CSS } from "@dnd-kit/utilities";
 import { CalendarDays } from "lucide-react";
 import { format, parseISO } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { cn } from "@/lib/utils";
 import { useStore } from "@/lib/store";
 import type { Task } from "@/lib/types";
-import { initials, isOverdue, memberName, priorityClass } from "./helpers";
+import { isOverdue, priorityClass } from "./helpers";
 
 export function TaskCardView({ task, overlay }: { task: Task; overlay?: boolean }) {
   const members = useStore((s) => s.members);
-  const name = memberName(members, task.assigneeId);
+  const member = members.find((m) => m.id === task.assigneeId);
   const overdue = isOverdue(task);
   return (
     <div
@@ -32,11 +32,7 @@ export function TaskCardView({ task, overlay }: { task: Task; overlay?: boolean 
             {format(parseISO(task.due), "MMM d")}
           </span>
         )}
-        {name && (
-          <Avatar className="ml-auto size-6" title={name}>
-            <AvatarFallback className="bg-primary text-[10px] text-primary-foreground">{initials(name)}</AvatarFallback>
-          </Avatar>
-        )}
+        {member && <UserAvatar name={member.name} avatar={member.avatar} className="ml-auto" />}
       </div>
     </div>
   );

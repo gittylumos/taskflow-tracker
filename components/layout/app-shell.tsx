@@ -1,13 +1,12 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Download, LayoutDashboard, Plus, Search, Users } from "lucide-react";
+import { Download, Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { useStore } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
@@ -15,8 +14,8 @@ import type { StatusId } from "@/lib/types";
 import { PRIORITIES } from "@/lib/types";
 import { Board } from "@/components/board/board";
 import { TaskSheet, type SheetTarget } from "@/components/board/task-sheet";
-import { TeamDialog } from "@/components/team/team-dialog";
-import { initials, isOverdue } from "@/components/board/helpers";
+import { AppSidebar } from "./app-sidebar";
+import { isOverdue } from "@/components/board/helpers";
 import { ThemeToggle } from "./theme-toggle";
 
 const ALL = "all";
@@ -28,7 +27,6 @@ export function AppShell() {
   const [assignee, setAssignee] = useState(ALL);
   const [priority, setPriority] = useState(ALL);
   const [target, setTarget] = useState<SheetTarget>(null);
-  const [teamOpen, setTeamOpen] = useState(false);
 
   const visible = useMemo(
     () => tasks.filter((t) =>
@@ -52,36 +50,7 @@ export function AppShell() {
 
   return (
     <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader className="px-4 py-4">
-          <div className="flex items-center gap-2 font-semibold">
-            <span className="grid size-7 place-items-center rounded-md bg-primary text-primary-foreground"><LayoutDashboard className="size-4" /></span>
-            Team Tracker
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Workspace</SidebarGroupLabel>
-            <SidebarMenu>
-              <SidebarMenuItem><SidebarMenuButton isActive><LayoutDashboard /> Board</SidebarMenuButton></SidebarMenuItem>
-              <SidebarMenuItem><SidebarMenuButton onClick={() => setTeamOpen(true)}><Users /> Team</SidebarMenuButton></SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>Members</SidebarGroupLabel>
-            <SidebarMenu>
-              {members.map((m) => (
-                <SidebarMenuItem key={m.id}>
-                  <SidebarMenuButton isActive={assignee === m.id} onClick={() => setAssignee(assignee === m.id ? ALL : m.id)}>
-                    <Avatar className="size-5"><AvatarFallback className="bg-primary text-[9px] text-primary-foreground">{initials(m.name)}</AvatarFallback></Avatar>
-                    {m.name}
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
+      <AppSidebar ready={ready} assignee={assignee} onAssignee={(id) => setAssignee(assignee === id ? ALL : id)} />
 
       <SidebarInset className="min-w-0 bg-background">
         <header className="flex flex-wrap items-center gap-2 border-b bg-surface-raised px-4 py-3 md:px-6">
@@ -131,7 +100,6 @@ export function AppShell() {
       </SidebarInset>
 
       <TaskSheet target={target} onClose={() => setTarget(null)} />
-      <TeamDialog open={teamOpen} onOpenChange={setTeamOpen} />
     </SidebarProvider>
   );
 }

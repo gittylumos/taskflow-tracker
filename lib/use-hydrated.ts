@@ -1,12 +1,13 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useStore } from "./store";
+import { useSettings } from "./settings";
 
-/** Rehydrates the persisted store on the client; avoids SSR/CSR mismatch. */
+/** Rehydrates persisted stores on the client; avoids SSR/CSR mismatch. */
 export function useHydrated() {
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    Promise.resolve(useStore.persist.rehydrate()).finally(() => setReady(true));
+    Promise.all([useStore.persist.rehydrate(), useSettings.persist.rehydrate()]).finally(() => setReady(true));
   }, []);
   return ready;
 }

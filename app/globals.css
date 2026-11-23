@@ -189,6 +189,7 @@
   --color-surface-column: var(--surface-column);
   --color-surface-raised: var(--surface-raised);
   --color-surface-overlay: var(--surface-overlay);
+  --color-brand: var(--brand);
   --color-danger: var(--danger);
   --color-warning: var(--warning);
   --color-success: var(--success);
@@ -222,3 +223,236 @@
 @utility elevated {
   box-shadow: var(--shadow-1), inset 0 1px 0 var(--edge-highlight);
 }
+
+/* ==========================================================================
+   Tracker styles. Each overrides semantic tokens only (same element as :root),
+   fully defined for light and dark. Selectors also work when scoped to a
+   preview tile (`.dark [data-style]`).
+   ========================================================================== */
+
+/* ---- Pixel: retro 8-bit, hard offset shadows, square corners ---- */
+[data-style="pixel"] {
+  --radius: 0px;
+  --font-sans: var(--font-pixel), var(--font-geist-sans);
+  --surface-canvas: #f4ecd8; --surface-column: #e9dfc4; --surface-raised: #fffaf0; --surface-overlay: #fffaf0;
+  --text-primary: #2b2140; --text-secondary: #5c4f78;
+  --border-subtle: #2b2140; --border-strong: #2b2140;
+  --brand: #6d28d9; --on-brand: #ffffff; --focus-ring: #6d28d9;
+  --secondary: #e9dfc4; --muted: #e9dfc4; --accent: #dccfae;
+  --sidebar: #fffaf0; --sidebar-accent: #e9dfc4;
+  --shadow-1: 3px 3px 0 #2b2140; --shadow-2: 4px 4px 0 #2b2140; --shadow-3: 6px 6px 0 #2b2140; --edge-highlight: transparent;
+}
+.dark[data-style="pixel"], .dark [data-style="pixel"] {
+  --surface-canvas: #151226; --surface-column: #1b1730; --surface-raised: #231e3d; --surface-overlay: #2a2448;
+  --text-primary: #f1ecff; --text-secondary: #b3a8d6;
+  --border-subtle: #5b4f9a; --border-strong: #7a6dc0;
+  --brand: #ffb347; --on-brand: #151226; --focus-ring: #ffb347;
+  --secondary: #231e3d; --muted: #231e3d; --accent: #2f2852;
+  --sidebar: #1b1730; --sidebar-accent: #2a2448;
+  --shadow-1: 3px 3px 0 #0b0916; --shadow-2: 4px 4px 0 #0b0916; --shadow-3: 6px 6px 0 #0b0916;
+}
+html[data-style="pixel"] { image-rendering: pixelated; }
+[data-style="pixel"] [data-avatar] { border-radius: 0; }
+[data-style="pixel"] :is(.elevated, [data-slot="button"], [data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="badge"]) { border-width: 2px; }
+[data-style="pixel"] [data-slot="button"]:active { transform: translate(2px, 2px); }
+
+/* ---- ASCII: terminal, monospace, dashed lines, no shadows ---- */
+[data-style="ascii"] {
+  --radius: 0px;
+  --font-sans: var(--font-geist-mono), ui-monospace, monospace;
+  --surface-canvas: #f6f5ee; --surface-column: #efeee4; --surface-raised: #fbfaf5; --surface-overlay: #fbfaf5;
+  --text-primary: #1c1c1a; --text-secondary: #55554f;
+  --border-subtle: #8a8a80; --border-strong: #1c1c1a;
+  --brand: #166534; --on-brand: #ffffff; --focus-ring: #166534;
+  --secondary: #efeee4; --muted: #efeee4; --accent: #e5e4d8;
+  --sidebar: #fbfaf5; --sidebar-accent: #efeee4;
+  --shadow-1: none; --shadow-2: none; --shadow-3: none; --edge-highlight: transparent;
+}
+.dark[data-style="ascii"], .dark [data-style="ascii"] {
+  --surface-canvas: #0f1115; --surface-column: #12151a; --surface-raised: #161a1f; --surface-overlay: #1a1f26;
+  --text-primary: #b7f5c4; --text-secondary: #78b58a;
+  --border-subtle: rgb(94 240 138 / 0.3); --border-strong: rgb(94 240 138 / 0.6);
+  --brand: #5ef08a; --on-brand: #0f1115; --focus-ring: #5ef08a;
+  --secondary: #161a1f; --muted: #161a1f; --accent: #1d2a22;
+  --sidebar: #12151a; --sidebar-accent: #1a1f26;
+}
+[data-style="ascii"] * { border-style: dashed; }
+[data-style="ascii"] [data-avatar] { border-radius: 0; }
+[data-style="ascii"] [data-avatar]::before { content: "("; }
+[data-style="ascii"] [data-avatar]::after { content: ")"; }
+[data-style="ascii"] .col-title::before { content: "[ "; }
+[data-style="ascii"] .col-title::after { content: " ]"; }
+
+/* ---- Toon: chunky, round, playful ---- */
+[data-style="toon"] {
+  --radius: 1.25rem;
+  --font-sans: var(--font-toon), var(--font-geist-sans);
+  --surface-canvas: #eaf6ff; --surface-column: #d6ecff; --surface-raised: #ffffff; --surface-overlay: #ffffff;
+  --text-primary: #1f2a44; --text-secondary: #4a5878;
+  --border-subtle: #1f2a44; --border-strong: #1f2a44;
+  --brand: #d6336c; --on-brand: #ffffff; --focus-ring: #d6336c;
+  --secondary: #d6ecff; --muted: #d6ecff; --accent: #c3e3ff;
+  --sidebar: #ffffff; --sidebar-accent: #d6ecff;
+  --shadow-1: 0 3px 0 #1f2a44; --shadow-2: 0 5px 0 #1f2a44; --shadow-3: 0 8px 0 #1f2a44; --edge-highlight: transparent;
+}
+.dark[data-style="toon"], .dark [data-style="toon"] {
+  --surface-canvas: #151a2b; --surface-column: #1b2136; --surface-raised: #222a45; --surface-overlay: #2a3354;
+  --text-primary: #f3f5ff; --text-secondary: #aab4d8;
+  --border-subtle: rgb(255 255 255 / 0.22); --border-strong: rgb(255 255 255 / 0.4);
+  --brand: #ff7aa8; --on-brand: #151a2b; --focus-ring: #ff7aa8;
+  --secondary: #222a45; --muted: #222a45; --accent: #2e3860;
+  --sidebar: #1b2136; --sidebar-accent: #2a3354;
+  --shadow-1: 0 3px 0 rgb(0 0 0 / 0.45); --shadow-2: 0 5px 0 rgb(0 0 0 / 0.45); --shadow-3: 0 8px 0 rgb(0 0 0 / 0.45);
+}
+[data-style="toon"] :is(.elevated, [data-slot="button"], [data-slot="input"], [data-slot="textarea"], [data-slot="select-trigger"], [data-slot="badge"]) { border-width: 2px; }
+[data-style="toon"] h1, [data-style="toon"] h2 { font-weight: 700; }
+
+/* ==========================================================================
+   Color themes (palettes), like an editor's color themes. Declared AFTER the
+   styles so they win ties. Accessible palettes also redefine status colors
+   so meaning never depends on red-vs-green alone; overdue and priority are
+   also conveyed with text.
+   ========================================================================== */
+[data-palette="blue"] { --brand: #1d5fd1; --on-brand: #ffffff; --focus-ring: #1d5fd1; }
+.dark[data-palette="blue"], .dark [data-palette="blue"] { --brand: #6aa9ff; --on-brand: #0f1115; --focus-ring: #6aa9ff; }
+
+[data-palette="red"] { --brand: #c0262d; --on-brand: #ffffff; --focus-ring: #c0262d; }
+.dark[data-palette="red"], .dark [data-palette="red"] { --brand: #ff7b7f; --on-brand: #0f1115; --focus-ring: #ff7b7f; }
+
+[data-palette="green"] { --brand: #17703f; --on-brand: #ffffff; --focus-ring: #17703f; }
+.dark[data-palette="green"], .dark [data-palette="green"] { --brand: #4cc38a; --on-brand: #0f1115; --focus-ring: #4cc38a; }
+
+/* Deuteranopia / protanopia: blue + orange/yellow axis (Okabe-Ito based) */
+[data-palette="cb-red-green"] {
+  --brand: #0072b2; --on-brand: #ffffff; --focus-ring: #0072b2;
+  --danger: #b8430a; --warning: #7a5c00; --success: #0072b2; --info: #5b5fc7;
+}
+.dark[data-palette="cb-red-green"], .dark [data-palette="cb-red-green"] {
+  --brand: #56b4e9; --on-brand: #0f1115; --focus-ring: #56b4e9;
+  --danger: #ff8a50; --warning: #f0e442; --success: #56b4e9; --info: #b6a4ff;
+}
+
+/* Tritanopia: magenta + teal axis, avoids blue-vs-yellow */
+[data-palette="cb-blue-yellow"] {
+  --brand: #b0246b; --on-brand: #ffffff; --focus-ring: #b0246b;
+  --danger: #c4161c; --warning: #9a4a00; --success: #007a78; --info: #4b5563;
+}
+.dark[data-palette="cb-blue-yellow"], .dark [data-palette="cb-blue-yellow"] {
+  --brand: #ff8fc0; --on-brand: #0f1115; --focus-ring: #ff8fc0;
+  --danger: #ff7b7f; --warning: #ffa94d; --success: #4fd1c5; --info: #a8b3c4;
+}
+
+/* High contrast */
+[data-palette="contrast"] {
+  --surface-canvas: #ffffff; --surface-column: #f0f0f0; --surface-raised: #ffffff; --surface-overlay: #ffffff;
+  --text-primary: #0a0a0a; --text-secondary: #2b2b2b;
+  --border-subtle: #3a3a3a; --border-strong: #0a0a0a;
+  --brand: #0000b3; --on-brand: #ffffff; --focus-ring: #0000b3;
+  --danger: #a30000; --warning: #6b4400; --success: #00591f; --info: #00419e;
+  --muted: #ebebeb; --secondary: #ebebeb; --accent: #dedede; --sidebar: #ffffff; --sidebar-accent: #ebebeb;
+}
+.dark[data-palette="contrast"], .dark [data-palette="contrast"] {
+  --surface-canvas: #0f1115; --surface-column: #14171c; --surface-raised: #181b20; --surface-overlay: #1e2229;
+  --text-primary: #ffffff; --text-secondary: #e6e6e6;
+  --border-subtle: rgb(255 255 255 / 0.45); --border-strong: rgb(255 255 255 / 0.8);
+  --brand: #ffd60a; --on-brand: #0f1115; --focus-ring: #ffd60a;
+  --danger: #ff8a8a; --warning: #ffd60a; --success: #6ee7a0; --info: #8fc1ff;
+  --muted: #1e2229; --secondary: #1e2229; --accent: #2a3038; --sidebar: #14171c; --sidebar-accent: #1e2229;
+}
+[data-palette="contrast"] :is(.elevated, [data-slot="button"], [data-slot="input"], [data-slot="select-trigger"], [data-slot="badge"]) { border-width: 2px; }
+
+/* ==========================================================================
+   Tracker styles (personalization). Selected via <html data-style="...">.
+   Each style overrides semantic tokens + radius + font for BOTH modes, so
+   light/dark keeps working. Selectors without `html` also scope previews.
+   Dark mode: `.dark[data-style]` (on <html>) or `.dark [data-style]` (preview).
+   ========================================================================== */
+
+/* ---------- Pixel ---------- */
+[data-style="pixel"] {
+  --font-sans: var(--font-pixel);
+  --radius: 0px;
+  --surface-canvas: #f4ecd8; --surface-column: #e9dfc4; --surface-raised: #fffaf0; --surface-overlay: #fffaf0;
+  --text-primary: #2b2140; --text-secondary: #5c4f78;
+  --border-subtle: #2b2140; --border-strong: #2b2140;
+  --brand: #6d28d9; --on-brand: #ffffff; --focus-ring: #6d28d9;
+  --secondary: #e9dfc4; --muted: #e9dfc4; --accent: #dccfa8;
+  --sidebar: #fffaf0; --sidebar-accent: #e9dfc4;
+  --shadow-1: 3px 3px 0 #2b2140; --shadow-2: 4px 4px 0 #2b2140; --shadow-3: 6px 6px 0 #2b2140;
+  --edge-highlight: transparent;
+}
+.dark[data-style="pixel"], .dark [data-style="pixel"] {
+  --surface-canvas: #151226; --surface-column: #1b1730; --surface-raised: #231e3d; --surface-overlay: #2a2448;
+  --text-primary: #f1ecff; --text-secondary: #b3a8d6;
+  --border-subtle: #6b5fa8; --border-strong: #6b5fa8;
+  --brand: #ffb02e; --on-brand: #151226; --focus-ring: #ffb02e;
+  --secondary: #2a2448; --muted: #2a2448; --accent: #342d5c;
+  --sidebar: #1b1730; --sidebar-accent: #2a2448;
+  --shadow-1: 3px 3px 0 #0d0b1a; --shadow-2: 4px 4px 0 #0d0b1a; --shadow-3: 6px 6px 0 #0d0b1a;
+}
+
+/* ---------- ASCII / terminal ---------- */
+[data-style="ascii"] {
+  --font-sans: var(--font-geist-mono);
+  --radius: 0px;
+  --surface-canvas: #f6f5ee; --surface-column: #efede2; --surface-raised: #fbfaf5; --surface-overlay: #fbfaf5;
+  --text-primary: #1c1c1a; --text-secondary: #55554f;
+  --border-subtle: rgb(28 28 26 / 0.45); --border-strong: rgb(28 28 26 / 0.7);
+  --brand: #166534; --on-brand: #f6f5ee; --focus-ring: #166534;
+  --secondary: #efede2; --muted: #efede2; --accent: #e5e2d2;
+  --sidebar: #fbfaf5; --sidebar-accent: #efede2;
+  --shadow-1: none; --shadow-2: none; --shadow-3: none;
+  --edge-highlight: transparent;
+}
+.dark[data-style="ascii"], .dark [data-style="ascii"] {
+  --surface-canvas: #0f1115; --surface-column: #12161b; --surface-raised: #161a20; --surface-overlay: #1a1f26;
+  --text-primary: #b7f5c4; --text-secondary: #6fae80;
+  --border-subtle: rgb(94 240 138 / 0.28); --border-strong: rgb(94 240 138 / 0.5);
+  --brand: #5ef08a; --on-brand: #0f1115; --focus-ring: #5ef08a;
+  --secondary: #1a1f26; --muted: #1a1f26; --accent: #1f252d;
+  --sidebar: #12161b; --sidebar-accent: #1a1f26;
+}
+
+/* ---------- Toon ---------- */
+[data-style="toon"] {
+  --font-sans: var(--font-toon);
+  --radius: 1.25rem;
+  --surface-canvas: #eaf6ff; --surface-column: #d6ebff; --surface-raised: #ffffff; --surface-overlay: #ffffff;
+  --text-primary: #1f2a44; --text-secondary: #4a5879;
+  --border-subtle: #1f2a44; --border-strong: #1f2a44;
+  --brand: #e11d6a; --on-brand: #ffffff; --focus-ring: #e11d6a;
+  --secondary: #d6ebff; --muted: #d6ebff; --accent: #c3e0fb;
+  --sidebar: #ffffff; --sidebar-accent: #d6ebff;
+  --shadow-1: 0 3px 0 #1f2a44; --shadow-2: 0 5px 0 #1f2a44; --shadow-3: 0 8px 0 #1f2a44;
+  --edge-highlight: transparent;
+}
+.dark[data-style="toon"], .dark [data-style="toon"] {
+  --surface-canvas: #151a2b; --surface-column: #1b2136; --surface-raised: #222a45; --surface-overlay: #2a3354;
+  --text-primary: #f3f5ff; --text-secondary: #aab4d8;
+  --border-subtle: rgb(255 255 255 / 0.28); --border-strong: rgb(255 255 255 / 0.4);
+  --brand: #ff7aa8; --on-brand: #151a2b; --focus-ring: #ff7aa8;
+  --secondary: #2a3354; --muted: #2a3354; --accent: #343f66;
+  --sidebar: #1b2136; --sidebar-accent: #2a3354;
+  --shadow-1: 0 3px 0 rgb(0 0 0 / 0.45); --shadow-2: 0 5px 0 rgb(0 0 0 / 0.45); --shadow-3: 0 8px 0 rgb(0 0 0 / 0.45);
+}
+
+/* ---------- Per-style structure ---------- */
+html[data-style="pixel"] :is([data-slot="card"], .elevated, [data-slot="button"], [data-slot="input"], [data-slot="select-trigger"], [data-slot="textarea"]),
+html[data-style="toon"] :is([data-slot="card"], .elevated, [data-slot="button"], [data-slot="input"], [data-slot="select-trigger"], [data-slot="textarea"]) {
+  border-width: 2px;
+}
+html[data-style="pixel"] [data-slot="button"],
+html[data-style="pixel"] .elevated { box-shadow: var(--shadow-1); }
+html[data-style="pixel"] [data-slot="button"]:active { box-shadow: none; transform: translate(3px, 3px); }
+html[data-style="pixel"] body { font-size: 15px; letter-spacing: 0.01em; }
+html[data-style="pixel"] [data-avatar] { border-radius: 0; image-rendering: pixelated; }
+html[data-style="toon"] body { font-weight: 500; }
+html[data-style="toon"] .elevated:hover { transform: translateY(-2px); }
+html[data-style="ascii"] * { border-style: dashed; }
+html[data-style="ascii"] [data-avatar] { border-radius: 0; }
+html[data-style="ascii"] .col-title::before { content: "[ "; }
+html[data-style="ascii"] .col-title::after { content: " ]"; }
+html[data-style="ascii"] [data-slot="badge"]::before { content: "<"; }
+html[data-style="ascii"] [data-slot="badge"]::after { content: ">"; }
+html[data-style="ascii"] [data-slot="progress-track"], html[data-style="ascii"] [data-slot="progress-indicator"] { border-radius: 0; }
+html[data-style] [data-avatar] svg { image-rendering: pixelated; }

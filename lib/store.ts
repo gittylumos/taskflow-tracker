@@ -35,6 +35,7 @@ interface State {
   /** Move task to a column, placing it before `beforeId` (or at the end). */
   moveTask: (id: string, status: StatusId, beforeId?: string | null) => void;
   addMember: (name: string) => void;
+  setMemberAvatar: (id: string, avatar: string) => void;
   removeMember: (id: string) => void;
   reset: () => void;
 }
@@ -72,6 +73,8 @@ export const useStore = create<State>()(
             ? s
             : { members: [...s.members, { id: uid(), name }] },
         ),
+      setMemberAvatar: (id, avatar) =>
+        set((s) => ({ members: s.members.map((m) => (m.id === id ? { ...m, avatar } : m)) })),
       removeMember: (id) =>
         set((s) => ({
           members: s.members.filter((m) => m.id !== id),

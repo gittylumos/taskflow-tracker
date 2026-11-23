@@ -20,7 +20,7 @@ export function Column({
       )}
     >
       <header className="flex items-center justify-between px-2 py-1.5">
-        <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{name}</h2>
+        <h2 className="col-title text-xs font-semibold uppercase tracking-wide text-muted-foreground">{name}</h2>
         <span className="rounded-full bg-muted px-2 text-xs tabular-nums text-muted-foreground">{tasks.length}</span>
       </header>
       <div ref={setNodeRef} className="flex min-h-16 flex-1 flex-col gap-2 p-1">

@@ -2,11 +2,10 @@
 import { useState } from "react";
 import { UserPlus, X } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useStore } from "@/lib/store";
-import { initials } from "@/components/board/helpers";
 
 export function TeamDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: boolean) => void }) {
   const { members, addMember, removeMember } = useStore();
@@ -21,7 +20,7 @@ export function TeamDialog({ open, onOpenChange }: { open: boolean; onOpenChange
         <ul className="grid gap-1">
           {members.map((m) => (
             <li key={m.id} className="flex items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-muted">
-              <Avatar className="size-7"><AvatarFallback className="bg-primary text-xs text-primary-foreground">{initials(m.name)}</AvatarFallback></Avatar>
+              <UserAvatar name={m.name} avatar={m.avatar} className="size-7" />
               <span className="flex-1 text-sm">{m.name}</span>
               <Button variant="ghost" size="icon-sm" aria-label={`Remove ${m.name}`} onClick={() => removeMember(m.id)}><X /></Button>
             </li>
