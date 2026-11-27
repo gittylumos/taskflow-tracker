@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import { Download, Plus, Search } from "lucide-react";
+import { Download, Plus, Search, SearchX, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -12,13 +12,12 @@ import { useStore } from "@/lib/store";
 import { useHydrated } from "@/lib/use-hydrated";
 import type { StatusId } from "@/lib/types";
 import { PRIORITIES } from "@/lib/types";
+import { ALL, filterTasks } from "@/lib/search";
 import { Board } from "@/components/board/board";
 import { TaskSheet, type SheetTarget } from "@/components/board/task-sheet";
 import { AppSidebar } from "./app-sidebar";
 import { isOverdue } from "@/components/board/helpers";
 import { ThemeToggle } from "./theme-toggle";
-
-const ALL = "all";
 
 export function AppShell() {
   const ready = useHydrated();
@@ -29,13 +28,10 @@ export function AppShell() {
   const [target, setTarget] = useState<SheetTarget>(null);
 
   const visible = useMemo(
-    () => tasks.filter((t) =>
-      (assignee === ALL || (assignee === "none" ? !t.assigneeId : t.assigneeId === assignee)) &&
-      (priority === ALL || t.priority === priority) &&
-      (!query || t.title.toLowerCase().includes(query.toLowerCase())),
-    ),
+    () => filterTasks(tasks, { query, assignee, priority }),
     [tasks, assignee, priority, query],
   );
+  const searching = query.trim() !== "";
   const done = tasks.filter((t) => t.status === "done").length;
   const overdue = ready ? tasks.filter(isOverdue).length : 0;
   const pct = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
@@ -59,7 +55,21 @@ export function AppShell() {
           <h1 className="mr-auto text-base font-semibold">Board</h1>
           <div className="relative">
             <Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-            <Input aria-label="Search tasks" placeholder="Search tasks" className="w-44 pl-8" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <Input
+              aria-label="Search tasks"
+              type="search"
+              placeholder="Search tasks"
+              className="w-44 pl-8 pr-8 [&::-webkit-search-cancel-button]:hidden"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Escape" && query) { e.preventDefault(); setQuery(""); } }}
+            />
+            {query && (
+              <Button type="button" variant="ghost" size="icon-xs" aria-label="Clear search"
+                className="absolute right-1 top-1.5 size-5" onClick={() => setQuery("")}>
+                <X />
+              </Button>
+            )}
           </div>
           <Select value={assignee} onValueChange={(v) => setAssignee(v ?? ALL)}>
             <SelectTrigger aria-label="Filter by assignee" className="w-36"><SelectValue>{(v: string) => v === ALL ? "All assignees" : v === "none" ? "Unassigned" : members.find((m) => m.id === v)?.name}</SelectValue></SelectTrigger>
@@ -90,7 +100,16 @@ export function AppShell() {
           </div>
         </div>
 
-        {ready ? (
+        {ready && tasks.length > 0 && visible.length === 0 ? (
+          <div role="status" className="mx-4 flex flex-col items-center gap-2 rounded-xl border border-dashed px-6 py-16 text-center md:mx-6">
+            <SearchX className="size-8 text-muted-foreground" />
+            <p className="font-medium">No matching tasks</p>
+            <p className="text-sm text-muted-foreground">
+              {searching ? <>Nothing matches &ldquo;{query.trim()}&rdquo;. Try a different keyword.</> : "No tasks match the current filters."}
+            </p>
+            {searching && <Button variant="outline" size="sm" onClick={() => setQuery("")}>Clear search</Button>}
+          </div>
+        ) : ready ? (
           <Board tasks={visible} onOpen={(id) => setTarget({ mode: "edit", id })} onAdd={add} />
         ) : (
           <div className="flex gap-3 px-4 md:px-6">
